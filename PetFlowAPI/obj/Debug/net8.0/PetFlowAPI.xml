@@ -1,0 +1,157 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PetFlowAPI</name>
+    </assembly>
+    <members>
+        <member name="M:PetFlowAPI.Controllers.ClinicController.Create(PetFlowAPI.DTOs.ClinicRequestDTO)">
+            <summary>Cria uma nova clínica.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.ClinicController.GetAll(System.String,System.Int32,System.Int32)">
+            <summary>Lista todas as clínicas com paginação e filtro por nome.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.ClinicController.GetById(System.Int64)">
+            <summary>Busca uma clínica pelo ID.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.ClinicController.Update(System.Int64,PetFlowAPI.DTOs.ClinicRequestDTO)">
+            <summary>Atualiza os dados de uma clínica.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.ClinicController.Delete(System.Int64)">
+            <summary>
+            Remove uma clínica e todos os seus registros dependentes em cascata.
+            </summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.CouponController.Create(PetFlowAPI.DTOs.CouponRequestDTO)">
+            <summary>Cria um novo cupom de desconto.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.CouponController.GetAll(System.String,System.Int32,System.Int32)">
+            <summary>Lista todos os cupons com paginação e filtro por código.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.CouponController.GetById(System.Int64)">
+            <summary>Busca um cupom pelo ID.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.CouponController.Update(System.Int64,PetFlowAPI.DTOs.CouponRequestDTO)">
+            <summary>Atualiza os dados de um cupom.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.CouponController.Delete(System.Int64)">
+            <summary>Remove um cupom e seus resgates associados.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.CouponController.UpdateStatus(System.Int64,System.String)">
+            <summary>Atualiza o status de um cupom.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.HealthEventController.Create(PetFlowAPI.DTOs.HealthEventRequestDTO)">
+            <summary>Registra um novo evento de saúde para um pet.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.HealthEventController.GetAll(System.Nullable{System.Int64},System.String,System.Int32,System.Int32,System.String,System.String)">
+            <summary>Lista eventos de saúde com paginação e filtros por petId, status e ordenação.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.HealthEventController.GetById(System.Int64)">
+            <summary>Busca um evento de saúde pelo ID.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.HealthEventController.Update(System.Int64,PetFlowAPI.DTOs.HealthEventRequestDTO)">
+            <summary>Atualiza os dados de um evento de saúde.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.HealthEventController.Delete(System.Int64)">
+            <summary>Remove um evento de saúde pelo ID.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.PetController.Create(PetFlowAPI.DTOs.PetRequestDTO)">
+            <summary>Cadastra um novo pet.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.PetController.GetAll(System.String,System.Int32,System.Int32)">
+            <summary>Lista todos os pets com paginação e filtro por nome.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.PetController.GetById(System.Int64)">
+            <summary>Busca um pet pelo ID.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.PetController.Update(System.Int64,PetFlowAPI.DTOs.PetRequestDTO)">
+            <summary>Atualiza os dados de um pet.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.PetController.Delete(System.Int64)">
+            <summary>Remove um pet e todos os seus registros dependentes em cascata.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.PlanController.Create(PetFlowAPI.DTOs.PlanRequestDTO)">
+            <summary>Cria um novo plano de saúde pet.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.PlanController.GetAll(System.String,System.Int32,System.Int32)">
+            <summary>Lista todos os planos com paginação e filtro por nome.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.PlanController.GetById(System.Int64)">
+            <summary>Busca um plano pelo ID.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.PlanController.Update(System.Int64,PetFlowAPI.DTOs.PlanRequestDTO)">
+            <summary>Atualiza os dados de um plano.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.PlanController.Delete(System.Int64)">
+            <summary>Remove um plano e suas assinaturas associadas.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.RedeemController.Create(PetFlowAPI.DTOs.RedeemRequestDTO)">
+            <summary>Registra o resgate de um cupom por um tutor.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.RedeemController.GetAll(System.Nullable{System.Int64},System.Int32,System.Int32,System.String,System.String)">
+            <summary>Lista resgates com paginação e filtro por tutorId e ordenação.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.RedeemController.GetById(System.Int64)">
+            <summary>Busca um resgate pelo ID.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.RedeemController.Delete(System.Int64)">
+            <summary>Remove um resgate pelo ID. Recurso imutável por design; use apenas para correções.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.SubscriptionController.Create(PetFlowAPI.DTOs.SubscriptionRequestDTO)">
+            <summary>Cria uma nova assinatura de plano para um pet.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.SubscriptionController.GetAll(System.Nullable{System.Int64},System.String,System.Int32,System.Int32,System.String,System.String)">
+            <summary>Lista assinaturas com paginação e filtros por petId, status e ordenação.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.SubscriptionController.GetById(System.Int64)">
+            <summary>Busca uma assinatura pelo ID.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.SubscriptionController.Update(System.Int64,PetFlowAPI.DTOs.SubscriptionRequestDTO)">
+            <summary>Atualiza os dados de uma assinatura.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.SubscriptionController.Delete(System.Int64)">
+            <summary>Remove uma assinatura pelo ID.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.SubscriptionController.UpdateStatus(System.Int64,System.String)">
+            <summary>Atualiza o status de uma assinatura .</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.TutorController.Create(PetFlowAPI.DTOs.TutorRequestDTO)">
+            <summary>Cadastra um novo tutor.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.TutorController.GetAll(System.String,System.Int32,System.Int32)">
+            <summary>Lista todos os tutores com paginação e filtro por nome.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.TutorController.GetById(System.Int64)">
+            <summary>Busca um tutor pelo ID.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.TutorController.Update(System.Int64,PetFlowAPI.DTOs.TutorRequestDTO)">
+            <summary>Atualiza os dados de um tutor.</summary>
+        </member>
+        <member name="M:PetFlowAPI.Controllers.TutorController.Delete(System.Int64)">
+            <summary>Remove um tutor e todos os seus registros dependentes em cascata.</summary>
+        </member>
+        <member name="T:PetFlowAPI.Domain.IRewardPointCalculator">
+            <summary>
+            Regra de negócio para cálculo de pontos de recompensa de um evento de saúde,
+            conforme o multiplicador do plano (<c>plan.points_per_event</c>) e os pontos
+            base do tipo de evento (<c>event_type.points_reward</c>) definidos no DDL Oracle.
+            </summary>
+        </member>
+        <member name="M:PetFlowAPI.Domain.IRewardPointCalculator.Calculate(System.Int32,System.Int32)">
+            <summary>
+            Calcula o total de pontos a conceder a um tutor quando um evento de saúde
+            é marcado como concluído (status REALIZADO).
+            </summary>
+            <param name="eventTypeBasePoints">Pontos base do tipo de evento (event_type.points_reward).</param>
+            <param name="planPointsMultiplier">Multiplicador do plano do pet (plan.points_per_event).</param>
+        </member>
+        <member name="T:PetFlowAPI.Migrations.InitialCreate">
+            <inheritdoc />
+        </member>
+        <member name="M:PetFlowAPI.Migrations.InitialCreate.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:PetFlowAPI.Migrations.InitialCreate.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>
