@@ -367,7 +367,7 @@ A API roda em `http://localhost:5000`. Todos os recursos suportam paginação vi
 
 | Método | Rota | Descrição | Parâmetros de Query |
 |--------|------|-----------|---------------------|
-| `GET` | `/subscriptions` | Lista assinaturas com paginação, filtro por pet e status | `petId`, `status`, `page`, `size`, `sortBy`, `direction` |
+| `GET` | `/subscriptions` | Lista assinaturas com paginação e filtro por pet e status | `petId`, `status`, `page`, `size` |
 | `GET` | `/subscriptions/{id}` | Busca assinatura pelo ID | — |
 | `POST` | `/subscriptions` | Cria nova assinatura | — |
 | `PUT` | `/subscriptions/{id}` | Atualiza dados da assinatura | — |
@@ -411,7 +411,7 @@ PUT /subscriptions/1/status?status=ENCERRADO
 
 | Método | Rota | Descrição | Parâmetros de Query |
 |--------|------|-----------|---------------------|
-| `GET` | `/health-events` | Lista eventos com paginação, filtro por pet e status | `petId`, `status`, `page`, `size`, `sortBy`, `direction` |
+| `GET` | `/health-events` | Lista eventos com paginação e filtro por pet e status | `petId`, `status`, `page`, `size` |
 | `GET` | `/health-events/{id}` | Busca evento pelo ID | — |
 | `POST` | `/health-events` | Registra novo evento de saúde | — |
 | `PUT` | `/health-events/{id}` | Atualiza dados do evento | — |
@@ -497,7 +497,7 @@ PUT /coupons/1/status?status=RESGATADO
 
 | Método | Rota | Descrição | Parâmetros de Query |
 |--------|------|-----------|---------------------|
-| `GET` | `/redeems` | Lista resgates com paginação, filtro por tutor e ordenação | `tutorId`, `page`, `size`, `sortBy`, `direction` |
+| `GET` | `/redeems` | Lista resgates com paginação e filtro por tutor | `tutorId`, `page`, `size` |
 | `GET` | `/redeems/{id}` | Busca resgate pelo ID | — |
 | `POST` | `/redeems` | Registra novo resgate de cupom | — |
 | `DELETE` | `/redeems/{id}` | Remove resgate | — |
