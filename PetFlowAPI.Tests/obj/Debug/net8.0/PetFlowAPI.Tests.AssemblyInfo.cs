@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PetFlowAPI.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+83709da9fa6a08c0dab973e7e1afa11d88bbf303")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3c3cc02df5d999450cf0b67008c272dd9f2adaa6")]
 [assembly: System.Reflection.AssemblyProductAttribute("PetFlowAPI.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PetFlowAPI.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
