@@ -320,7 +320,6 @@ C:\Users\WIN\Downloads\PetFlowAPI3\PetFlowAPI\obj\Debug\net8.0\staticwebassets.b
 C:\Users\WIN\Downloads\PetFlowAPI3\PetFlowAPI\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\WIN\Downloads\PetFlowAPI3\PetFlowAPI\obj\Debug\net8.0\staticwebassets.build.endpoints.json
 C:\Users\WIN\Downloads\PetFlowAPI3\PetFlowAPI\obj\Debug\net8.0\swae.build.ex.cache
-C:\Users\WIN\Downloads\PetFlowAPI3\PetFlowAPI\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\WIN\Downloads\PetFlowAPI3\PetFlowAPI\obj\Debug\net8.0\PetFlowAPI.csproj.Up2Date
 C:\Users\WIN\Downloads\PetFlowAPI3\PetFlowAPI\obj\Debug\net8.0\PetFlowAPI.dll
 C:\Users\WIN\Downloads\PetFlowAPI3\PetFlowAPI\obj\Debug\net8.0\refint\PetFlowAPI.dll

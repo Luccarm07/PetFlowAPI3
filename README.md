@@ -11,13 +11,13 @@
 - [Objetivo do Challenge](#objetivo-do-challenge)
 - [Arquitetura do Projeto](#arquitetura-do-projeto)
 - [Visão de Domínio](#visão-de-domínio)
-- [Autenticação (JWT)](#autenticação-jwt)
 - [Documentação das Rotas](#documentação-das-rotas)
 - [Monitoramento e Observabilidade](#monitoramento-e-observabilidade)
 - [Banco de Dados](#banco-de-dados)
 - [Instruções de Instalação e Execução](#instruções-de-instalação-e-execução)
 - [Testes Automatizados](#testes-automatizados)
 - [Testes Manuais da API](#testes-manuais-da-api)
+- [Autenticação (JWT) — infraestrutura opcional](#autenticação-jwt--infraestrutura-opcional)
 - [Observações Finais](#observações-finais)
 
 ---
@@ -30,9 +30,9 @@ O sistema gerencia o ciclo completo: cadastro de tutores e pets, vínculo com cl
 
 A partir da **Sprint 3**, o projeto evoluiu para incorporar práticas de produção:
 
-- **autenticação via JWT** (login e emissão de token)
 - **observabilidade completa**: health checks, logging estruturado e distributed tracing/métricas
 - **testes automatizados** unitários e de integração seguindo o padrão AAA (Arrange-Act-Assert)
+- infraestrutura opcional de **login e emissão de token JWT** (não protege rotas ainda — ver seção [Autenticação (JWT)](#autenticação-jwt--infraestrutura-opcional))
 
 O projeto demonstra uma aplicação backend robusta com:
 - arquitetura em camadas bem definida
@@ -71,9 +71,9 @@ Desenvolver uma solução utilizando C# e ASP.NET Core capaz de:
 - garantir validações e tratamento de exceções para erros Oracle
 - respeitar os fundamentos de APIs REST (verbos HTTP, códigos de status, recursos)
 - disponibilizar documentação interativa via Swagger/OpenAPI
-- autenticar usuários via **JWT**
 - expor **health checks**, **logging estruturado** e **tracing/métricas** para monitoramento
 - garantir qualidade com **testes automatizados** (unitários e de integração)
+- prover infraestrutura de login e emissão de token JWT (não obrigatório na Sprint 3)
 - atender aos requisitos técnicos da disciplina
 
 ---
@@ -157,49 +157,6 @@ PetFlowAPI3/
 | 🎫 **Resgate** | Uso de um cupom pelo tutor, consumindo pontos acumulados. |
 | 🔢 **Ponto de Recompensa** | Pontos acumulados pelo tutor por ações realizadas (calculados via `RewardPointCalculator`). |
 | ⚠️ **Score de Risco** | Pontuação de risco calculada por pet, classificada em faixas de nível de risco. |
-
----
-
-## 🔐 Autenticação (JWT)
-
-A API utiliza **JWT Bearer** (`Microsoft.AspNetCore.Authentication.JwtBearer`) para autenticação. O fluxo básico é:
-
-1. **Cadastro público** — `POST /tutors` cria um novo tutor com senha hasheada (`PasswordService`), sem exigir token.
-2. **Login** — `POST /auth/login` valida as credenciais e retorna um token de acesso.
-3. **Uso do token** — o token pode ser enviado no header `Authorization: Bearer {token}` nas chamadas subsequentes.
-
-**Request (`POST /auth/login`):**
-```json
-{
-  "email": "maria@email.com",
-  "password": "senha123"
-}
-```
-
-**Response (200):**
-```json
-{
-  "accessToken": "eyJhbGciOiJIUzI1NiIs...",
-  "expiresAt": "2026-09-01T12:00:00Z",
-  "tutorId": 1,
-  "name": "Maria Silva",
-  "email": "maria@email.com"
-}
-```
-
-> **Nota de compatibilidade:** nesta sprint, a infraestrutura de autenticação (login, emissão e validação de token) está implementada e testada, mas os demais endpoints de negócio (`/pets`, `/clinics`, `/health-events`, etc.) permanecem acessíveis sem token, preservando a compatibilidade com os fluxos da Sprint 2. Apenas `POST /tutors` (cadastro) e `POST /auth/login` são explicitamente públicos por design; a aplicação de `[Authorize]` nas demais rotas é o próximo passo previsto de evolução.
-
-Configure a chave, emissor, audiência e expiração do token em `appsettings.json`:
-```json
-"Jwt": {
-  "Key": "substitua-por-uma-chave-secreta-com-no-minimo-32-caracteres",
-  "Issuer": "PetFlowAPI",
-  "Audience": "PetFlowClients",
-  "ExpirationMinutes": 60
-}
-```
-
----
 
 ## 📦 Documentação das Rotas
 
@@ -797,6 +754,43 @@ Fluxo sugerido respeitando as dependências de FK:
 
 ---
 
+## 🔐 Autenticação (JWT) — infraestrutura opcional
+
+O projeto já inclui login e emissão de token JWT (`Microsoft.AspNetCore.Authentication.JwtBearer`), mas isso não é um requisito da Sprint 3 e **nenhuma rota está protegida com `[Authorize]` no momento** — todos os endpoints de negócio continuam abertos, inclusive sem token.
+
+- `POST /tutors` — cadastra um tutor com senha hasheada (`PasswordService`)
+- `POST /auth/login` — valida credenciais e retorna um `accessToken` (Bearer)
+
+**Request/Response de exemplo:**
+```json
+// POST /auth/login
+{ "email": "maria@email.com", "password": "senha123" }
+```
+```json
+// 200 OK
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIs...",
+  "expiresAt": "2026-09-01T12:00:00Z",
+  "tutorId": 1,
+  "name": "Maria Silva",
+  "email": "maria@email.com"
+}
+```
+
+Configure a chave, emissor, audiência e expiração em `appsettings.json`:
+```json
+"Jwt": {
+  "Key": "substitua-por-uma-chave-secreta-com-no-minimo-32-caracteres",
+  "Issuer": "PetFlowAPI",
+  "Audience": "PetFlowClients",
+  "ExpirationMinutes": 60
+}
+```
+
+> Aplicar `[Authorize]` nas rotas de negócio é um passo de evolução futuro, não coberto por esta sprint.
+
+---
+
 ## 🧭 Observações Finais
 
 O PetFlow foi desenvolvido com foco em:
@@ -806,8 +800,8 @@ O PetFlow foi desenvolvido com foco em:
 - **Deleção em cascata manual** respeitando as restrições de FK do Oracle
 - **Documentação automática** completa via Swagger/OpenAPI
 - **Padrão REST** com verbos HTTP semânticos e códigos de status corretos
-- **Autenticação JWT** para login de tutores, com infraestrutura pronta para restringir rotas em sprints futuras
 - **Observabilidade de ponta a ponta**: health checks, logging estruturado com correlação e tracing/métricas via OpenTelemetry
 - **Qualidade garantida por testes automatizados** unitários e de integração, seguindo o padrão AAA
+- **Infraestrutura de login e token JWT** já disponível, pronta para restringir rotas em sprints futuras (item opcional, fora do escopo desta sprint)
 
 Desenvolvido como parte do **Challenge 2TDSPX — FIAP 2026**
