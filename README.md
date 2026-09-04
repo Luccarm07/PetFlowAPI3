@@ -28,11 +28,11 @@ O **PetFlow** é uma API REST desenvolvida em **C# com ASP.NET Core (.NET 8)** p
 
 O sistema gerencia o ciclo completo: cadastro de tutores e pets, vínculo com clínicas e planos de saúde, assinatura de planos, histórico de eventos clínicos, acúmulo de pontos de recompensa, emissão de cupons e registro de resgates.
 
-A partir da **Sprint 3**, o projeto evoluiu para incorporar práticas de produção:
+Na **Sprint 3**, o projeto evoluiu para incorporar monitoramento, observabilidade e testes automatizados:
 
 - **observabilidade completa**: health checks, logging estruturado e distributed tracing/métricas
 - **testes automatizados** unitários e de integração seguindo o padrão AAA (Arrange-Act-Assert)
-- infraestrutura opcional de **login e emissão de token JWT** (não protege rotas ainda — ver seção [Autenticação (JWT)](#autenticação-jwt--infraestrutura-opcional))
+- infraestrutura opcional de **login e emissão de token JWT**. Nesta versão, o token é emitido e validado pelo serviço, mas **as rotas de negócio ainda não exigem `[Authorize]`** (ver seção [Autenticação (JWT)](#autenticação-jwt--infraestrutura-opcional))
 
 O projeto demonstra uma aplicação backend robusta com:
 - arquitetura em camadas bem definida
@@ -43,7 +43,7 @@ O projeto demonstra uma aplicação backend robusta com:
 - tratamento global de exceções com mensagens amigáveis
 - monitoramento de saúde da aplicação, do banco e de serviços externos
 - logging correlacionado e tracing distribuído via OpenTelemetry
-- cobertura de testes com xUnit, Moq e `WebApplicationFactory`
+- testes com xUnit, Moq e `WebApplicationFactory`, com `coverlet.collector` disponível para coleta opcional de cobertura
 
 ---
 
@@ -73,7 +73,7 @@ Desenvolver uma solução utilizando C# e ASP.NET Core capaz de:
 - disponibilizar documentação interativa via Swagger/OpenAPI
 - expor **health checks**, **logging estruturado** e **tracing/métricas** para monitoramento
 - garantir qualidade com **testes automatizados** (unitários e de integração)
-- prover infraestrutura de login e emissão de token JWT (não obrigatório na Sprint 3)
+- prover infraestrutura de login e emissão de token JWT (funcionalidade complementar; não obrigatória para a Sprint 3)
 - atender aos requisitos técnicos da disciplina
 
 ---
@@ -122,8 +122,7 @@ PetFlowAPI3/
 │   ├── Security/
 │   │   └── AuthServices.cs           # PasswordService (hash) e TokenService (JWT)
 │   │
-│   ├── appsettings.json
-│   ├── appsettings.Development.example.json  # Modelo de configuração local (sem segredos)
+│   ├── appsettings.json              # Configuração com placeholders; sem credenciais reais
 │   └── Program.cs                    # Bootstrap, middlewares, observabilidade e DI
 │
 ├── PetFlowAPI.Tests/                 # Projeto de testes (xUnit)
@@ -630,15 +629,11 @@ cd PetFlowAPI3
 
 ---
 
-### Passo 2 — Configurar a string de conexão e o JWT (OBRIGATÓRIO)
+### Passo 2 — Configurar a string de conexão e o JWT
 
-Copie o arquivo de exemplo e edite com suas credenciais:
+O repositório contém apenas `PetFlowAPI/appsettings.json`, com **placeholders** para as credenciais. Não é necessário copiar nenhum arquivo de exemplo.
 
-```bash
-cp PetFlowAPI/appsettings.Development.example.json PetFlowAPI/appsettings.Development.json
-```
-
-Edite `appsettings.Development.json` (ou `appsettings.json`) com as credenciais do seu Oracle e uma chave JWT própria:
+Edite `PetFlowAPI/appsettings.json` (ou forneça os mesmos valores por variáveis de ambiente/User Secrets) com as credenciais do seu Oracle e uma chave JWT de desenvolvimento:
 
 ```json
 {
@@ -655,7 +650,7 @@ Edite `appsettings.Development.json` (ou `appsettings.json`) com as credenciais 
 ```
 
 > Para Oracle XE local, o `Data Source` geralmente é `localhost:1521/XEPDB1`.
-> `appsettings.Development.json` não deve ser commitado — ele já está no `.gitignore`.
+> **Não utilize credenciais reais no repositório.** O `appsettings.json` versionado contém apenas placeholders (`SEU_USUARIO`/`SUA_SENHA`).
 
 ---
 
@@ -699,8 +694,7 @@ http://localhost:5000/health/live
 ```bash
 git clone https://github.com/Luccarm07/PetFlowAPI3.git
 cd PetFlowAPI3
-cp PetFlowAPI/appsettings.Development.example.json PetFlowAPI/appsettings.Development.json
-# Edite appsettings.Development.json com suas credenciais Oracle e chave JWT
+# Edite PetFlowAPI/appsettings.json e substitua os placeholders pelas configurações locais
 # Execute o script Database/2TDSPX_CodigoSql_PetFlow.sql no Oracle
 dotnet restore
 dotnet run --project PetFlowAPI
@@ -724,11 +718,23 @@ dotnet test
 | Arquivo | Tipo | Cobre |
 |---------|------|-------|
 | `RewardPointCalculatorTests.cs` | Unitário | Regra de cálculo de pontos de recompensa, incluindo casos de erro (multiplicador/pontos negativos) |
-| `AuthTests.cs` | Unitário + Integração | Hash/verificação de senha; fluxo completo de cadastro → login → acesso a rota protegida; erros 400/401 |
+| `AuthTests.cs` | Unitário + Integração | Hash/verificação de senha; cadastro → login → emissão de token JWT; erros 400/401; acesso às rotas continua público nesta versão |
 | `HealthChecksTests.cs` | Unitário | `ExternalServicesHealthCheck` com dependências mockadas (Moq) |
 | `ApiIntegrationTests.cs` | Integração | Health checks via HTTP real, propagação de `X-Correlation-ID`, resposta 404 para rota inexistente |
 
 Os testes de integração usam `WebApplicationFactory<Program>` com um banco **InMemory** (`ApiFactory.cs`), isolando os testes de uma instância Oracle real.
+
+A suíte atual possui **17 testes automatizados**. Na execução validada para esta Sprint, o resultado foi **17 aprovados, 0 falhas e 0 ignorados**.
+
+### Coleta opcional de cobertura
+
+O projeto inclui `coverlet.collector`. Para gerar o arquivo de cobertura no diretório `TestResults`, execute:
+
+```bash
+dotnet test --collect:"XPlat Code Coverage"
+```
+
+A rubrica desta Sprint não define um percentual mínimo de cobertura; o comando acima é disponibilizado como evidência complementar da abrangência dos testes.
 
 ---
 
@@ -741,7 +747,7 @@ Fluxo sugerido respeitando as dependências de FK:
 1. `POST /clinics` — cadastrar uma clínica
 2. `POST /plans` — criar um plano vinculado à clínica
 3. `POST /tutors` — cadastrar um tutor (rota pública)
-4. `POST /auth/login` — autenticar o tutor e obter o token JWT
+4. `POST /auth/login` — autenticar o tutor e verificar a emissão do token JWT
 5. `POST /pets` — cadastrar um pet vinculado ao tutor
 6. `POST /subscriptions` — assinar um plano para o pet
 7. `POST /health-events` — registrar eventos de saúde para o pet
@@ -756,18 +762,34 @@ Fluxo sugerido respeitando as dependências de FK:
 
 ## 🔐 Autenticação (JWT) — infraestrutura opcional
 
-O projeto já inclui login e emissão de token JWT (`Microsoft.AspNetCore.Authentication.JwtBearer`), mas isso não é um requisito da Sprint 3 e **nenhuma rota está protegida com `[Authorize]` no momento** — todos os endpoints de negócio continuam abertos, inclusive sem token.
+O projeto possui infraestrutura de autenticação JWT como funcionalidade complementar: cadastro de tutor com senha protegida por hash, login e emissão de `accessToken`. **Nesta versão da Sprint 3, as rotas de negócio não estão protegidas por `[Authorize]`**; portanto, possuir um token não é requisito para acessar os endpoints de negócio.
 
-- `POST /tutors` — cadastra um tutor com senha hasheada (`PasswordService`)
-- `POST /auth/login` — valida credenciais e retorna um `accessToken` (Bearer)
+Isso é intencional nesta versão: a autenticação foi preparada para evolução futura, mas a proteção das rotas não faz parte do escopo obrigatório desta Sprint.
 
-**Request/Response de exemplo:**
+### Componentes
+
+- `PasswordService` — gera e valida o hash da senha.
+- `TokenService` — gera tokens JWT.
+- `AuthController` — disponibiliza `POST /auth/login`.
+- `Microsoft.AspNetCore.Authentication.JwtBearer` — configura a validação JWT no container de serviços.
+
+### Fluxo atual
+
+1. `POST /tutors` — cadastra o tutor e armazena a senha em formato hasheado.
+2. `POST /auth/login` — valida e-mail e senha.
+3. Em caso de sucesso, retorna um `accessToken` JWT e os dados básicos do tutor.
+4. As rotas de negócio permanecem públicas nesta versão.
+
+**Exemplo de login:**
 ```json
-// POST /auth/login
-{ "email": "maria@email.com", "password": "senha123" }
+{
+  "email": "maria@email.com",
+  "password": "senha123"
+}
 ```
+
+**Resposta de sucesso:**
 ```json
-// 200 OK
 {
   "accessToken": "eyJhbGciOiJIUzI1NiIs...",
   "expiresAt": "2026-09-01T12:00:00Z",
@@ -777,7 +799,7 @@ O projeto já inclui login e emissão de token JWT (`Microsoft.AspNetCore.Authen
 }
 ```
 
-Configure a chave, emissor, audiência e expiração em `appsettings.json`:
+A configuração fica em `appsettings.json`:
 ```json
 "Jwt": {
   "Key": "substitua-por-uma-chave-secreta-com-no-minimo-32-caracteres",
@@ -787,9 +809,37 @@ Configure a chave, emissor, audiência e expiração em `appsettings.json`:
 }
 ```
 
-> Aplicar `[Authorize]` nas rotas de negócio é um passo de evolução futuro, não coberto por esta sprint.
+> **Importante:** não confundir a emissão de JWT com autorização de endpoints. A aplicação consegue emitir o token, mas a proteção efetiva das rotas com `[Authorize]` fica para uma evolução futura.
 
----
+## ✅ Checklist da Sprint 3
+
+Esta versão contempla os requisitos descritos para **Advanced Business Development with .NET**:
+
+| Requisito | Implementação no projeto |
+|---|---|
+| **Health Checks** | `/health`, `/health/ready`, `/health/live`; banco Oracle via `AddDbContextCheck`; serviços externos via `ExternalServicesHealthCheck` |
+| **Logging estruturado** | Serilog, níveis configurados, `TraceId`, `CorrelationId` e `X-Correlation-ID` |
+| **Tracing e métricas** | OpenTelemetry para ASP.NET Core, `HttpClient`, runtime e métrica customizada `petflow.http.request.duration` |
+| **Testes unitários** | xUnit + Moq para regras de domínio, segurança e health checks |
+| **Testes de integração** | `WebApplicationFactory<Program>` + banco InMemory, cobrindo HTTP, autenticação/login, validação e erros |
+| **AAA e organização** | Testes separados em `PetFlowAPI.Tests`, nomenclatura descritiva e fixture `ApiFactory` |
+| **README** | Endpoints de monitoramento, execução da API, execução dos testes e funcionalidades da Sprint 3 documentados neste arquivo |
+
+### Comandos principais para avaliação
+
+```bash
+# Restaurar dependências
+dotnet restore
+
+# Executar a suíte de testes
+dotnet test
+
+# Executar testes e coletar cobertura opcional
+dotnet test --collect:"XPlat Code Coverage"
+
+# Executar a API
+dotnet run --project PetFlowAPI
+```
 
 ## 🧭 Observações Finais
 
