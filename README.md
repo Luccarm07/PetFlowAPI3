@@ -811,19 +811,6 @@ A configuração fica em `appsettings.json`:
 
 > **Importante:** não confundir a emissão de JWT com autorização de endpoints. A aplicação consegue emitir o token, mas a proteção efetiva das rotas com `[Authorize]` fica para uma evolução futura.
 
-## ✅ Checklist da Sprint 3
-
-Esta versão contempla os requisitos descritos para **Advanced Business Development with .NET**:
-
-| Requisito | Implementação no projeto |
-|---|---|
-| **Health Checks** | `/health`, `/health/ready`, `/health/live`; banco Oracle via `AddDbContextCheck`; serviços externos via `ExternalServicesHealthCheck` |
-| **Logging estruturado** | Serilog, níveis configurados, `TraceId`, `CorrelationId` e `X-Correlation-ID` |
-| **Tracing e métricas** | OpenTelemetry para ASP.NET Core, `HttpClient`, runtime e métrica customizada `petflow.http.request.duration` |
-| **Testes unitários** | xUnit + Moq para regras de domínio, segurança e health checks |
-| **Testes de integração** | `WebApplicationFactory<Program>` + banco InMemory, cobrindo HTTP, autenticação/login, validação e erros |
-| **AAA e organização** | Testes separados em `PetFlowAPI.Tests`, nomenclatura descritiva e fixture `ApiFactory` |
-| **README** | Endpoints de monitoramento, execução da API, execução dos testes e funcionalidades da Sprint 3 documentados neste arquivo |
 
 ### Comandos principais para avaliação
 
